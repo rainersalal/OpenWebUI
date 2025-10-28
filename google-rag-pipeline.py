@@ -1,6 +1,6 @@
 """
 title: Google Shared Drive RAG Filter
-author: Custom
+author: Rainer Fehrenbacher
 date: 2025-10-28
 version: 1.3
 license: MIT
@@ -20,7 +20,7 @@ class Pipeline:
         priority: int = 0
         GOOGLE_DRIVE_CREDENTIALS: str = ""
         SHARED_DRIVE_ID: str = ""
-        OPENAI_API_KEY: str = ""
+        OPENAI_API_KEY: Optional[str] = None
         EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
         TOP_K: int = 5
         CHUNK_SIZE: int = 1024
@@ -226,4 +226,5 @@ class Pipeline:
 
     async def outlet(self, body: dict, user: Optional[dict] = None) -> dict:
         """Process outgoing responses - called AFTER the LLM"""
+
         return body
