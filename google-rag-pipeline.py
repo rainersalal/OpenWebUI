@@ -96,7 +96,14 @@ class Pipeline:
             json.dump(credentials_dict, f)
         
         # Set up embedding model
-        if self.valves.OPENAI_API_KEY:
+        # Treat "-", "none", empty string, or None as "no API key"
+        has_openai_key = (
+            self.valves.OPENAI_API_KEY 
+            and self.valves.OPENAI_API_KEY.strip() != ""
+            and self.valves.OPENAI_API_KEY.strip().lower() not in ["-", "none", "n/a"]
+        )
+        
+        if has_openai_key:
             print("🔑 Using OpenAI embeddings")
             os.environ["OPENAI_API_KEY"] = self.valves.OPENAI_API_KEY
             from llama_index.embeddings.openai import OpenAIEmbedding
