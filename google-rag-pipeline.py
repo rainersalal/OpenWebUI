@@ -1,6 +1,6 @@
 """
 title: Google Shared Drive RAG Filter
-author: Rainer Fehrenbacher
+author: Custom
 date: 2025-10-28
 version: 1.3
 license: MIT
@@ -120,13 +120,13 @@ class Pipeline:
         # Initialize Google Drive Reader
         print(f"📂 Connecting to Shared Drive: {self.valves.SHARED_DRIVE_ID}")
         loader = GoogleDriveReader(
-            service_account_key_path=creds_path,
-            drive_id=self.valves.SHARED_DRIVE_ID
+            service_account_key_path=creds_path
         )
         
-        # Load documents
+        # Load documents from Shared Drive
+        # Note: For Shared Drives, we pass drive_id to load_data(), not the constructor
         print("📥 Loading documents from Shared Drive...")
-        self.documents = loader.load_data()
+        self.documents = loader.load_data(drive_id=self.valves.SHARED_DRIVE_ID)
         print(f"✅ Loaded {len(self.documents)} documents")
         
         # Create index
@@ -226,5 +226,4 @@ class Pipeline:
 
     async def outlet(self, body: dict, user: Optional[dict] = None) -> dict:
         """Process outgoing responses - called AFTER the LLM"""
-
         return body
